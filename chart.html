@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Social Media Usage in the Philippines</title>
+    <style>
+      
+        .chart-container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .body{
+          background-color: beige;
+        }
+    </style>
+</head>
+<body class="body">
+  <h1 style="text-align: center;">Social Media Usage in the Philippines (2024)</h1>
+    <div class="chart-container">
+        <canvas id="SocMedChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('SocMedChart').getContext('2d');
+      
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Facebook', 'TikTok', 'YouTube', 'Instagram', 'Twitter'],
+            datasets: [{
+              label: 'Million Users on (2024)',
+              data: [76.01, 45.8, 74.2, 20.62, 10.5], 
+              backgroundColor: [
+                'rgb(2, 76, 170)', 
+                'rgb(60, 61, 55)',     
+                'rgb(207, 10, 10)',   
+                'rgb(251, 37, 118)',
+                'rgb(82, 92, 235)' 
+              ],
+              borderColor: [
+                'rgba(59, 89, 152, 1)',
+                'rgba(0, 0, 0, 1)',
+                'rgba(255, 0, 0, 1)',
+                'rgba(193, 53, 132, 1)',
+                'rgba(29, 161, 242, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Number of Users (Millions)'
+                }
+              }
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Social Media Usage in the Philippines (2024)'
+              }
+            }
+          }
+        });
+      </script>
+</body>
+</html>
