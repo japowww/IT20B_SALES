@@ -1,4 +1,5 @@
 {
-    "data": [50, 60, 200, 45, 150]  
+    "platforms": ["Viber", "Discord", "WhatsApp", "Telegram", "Messenger"],
+    "data": [200, 150, 300, 180, 250] 
   }
   

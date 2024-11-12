@@ -1,137 +1,124 @@
-const barCtx = document.getElementById('myChart');
-const pieCtx = document.getElementById('pieChart');
-const lineCtx = document.getElementById('lineChart'); 
-const areaCtx = document.getElementById('areaChart'); 
-
-fetch('datachart.json')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+class ChartManager {
+    constructor(dataUrl) {
+      this.dataUrl = dataUrl;
+      this.platforms = [];
+      this.usersData = [];
     }
-    return response.json();
-  })
-  .then(data => {
   
-    const platforms = ['Viber', 'Discord', 'WhatsApp', 'Telegram', 'Messenger'];
-    const usersData = data.data;
 
-    
-    new Chart(barCtx, {
+    async fetchData() {
+      try {
+        const response = await fetch(this.dataUrl);
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        this.platforms = data.platforms;
+        this.usersData = data.data;
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    }
+  
+   
+    initializeCharts() {
+      this.createBarChart();
+      this.createPieChart();
+      this.createLineChart();
+      this.createAreaChart();
+    }
+  
+
+    createBarChart() {
+      const barCtx = document.getElementById('myChart');
+      new Chart(barCtx, {
         type: 'bar',
         data: {
-          labels: platforms,
+          labels: this.platforms,
           datasets: [{
             label: 'Number of Users (millions)',
-            data: usersData,
+            data: this.usersData,
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',   
-              'rgba(54, 162, 235, 0.2)',  
-              'rgba(255, 206, 86, 0.2)',  
-              'rgba(75, 192, 192, 0.2)',  
-              'rgba(153, 102, 255, 0.2)'  
+              'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',   
-              'rgba(54, 162, 235, 1)',    
-              'rgba(255, 206, 86, 1)',    
-              'rgba(75, 192, 192, 1)',    
-              'rgba(153, 102, 255, 1)'    
+            `black`
             ],
             borderWidth: 1
           }]
         },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
+        options: { scales: { y: { beginAtZero: true } } }
       });
+    }
+  
 
+    createPieChart() {
+      const pieCtx = document.getElementById('pieChart');
+      new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+          labels: this.platforms,
+          datasets: [{
+            label: 'Number of Users (millions)',
+            data: this.usersData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+              `black`
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+  
+
+    createLineChart() {
+      const lineCtx = document.getElementById('lineChart');
+      new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: this.platforms,
+          datasets: [{
+            label: 'Number of Users (millions)',
+            data: this.usersData,
+            borderColor: 'black',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            fill: false,
+            borderWidth: 2
+          }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+      });
+    }
+
+    createAreaChart() {
+      const areaCtx = document.getElementById('areaChart');
+      new Chart(areaCtx, {
+        type: 'line',
+        data: {
+          labels: this.platforms,
+          datasets: [{
+            label: 'Number of Users (millions)',
+            data: this.usersData,
+            borderColor: 'black',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            fill: true,
+            borderWidth: 2
+          }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+      });
+    }
+  }
+  
  
-    new Chart(pieCtx, {
-      type: 'pie',
-      data: {
-        labels: platforms,
-        datasets: [{
-          label: 'Number of Users (millions)',
-          data: usersData,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',  
-            'rgba(54, 162, 235, 0.2)',  
-            'rgba(255, 206, 86, 0.2)',  
-            'rgba(75, 192, 192, 0.2)',  
-            'rgba(153, 102, 255, 0.2)', 
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',  
-            'rgba(54, 162, 235, 1)',    
-            'rgba(255, 206, 86, 1)',    
-            'rgba(75, 192, 192, 1)',   
-            'rgba(153, 102, 255, 1)',   
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false, 
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-        
-      
-    });
-
-    
-    new Chart(lineCtx, {
-      type: 'line',
-      data: {
-        labels: platforms,
-        datasets: [{
-          label: 'Number of Users (millions)',
-          data: usersData,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          fill: false, 
-          borderWidth: 2
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-
-    new Chart(areaCtx, {
-      type: 'line',
-      data: {
-        labels: platforms,
-        datasets: [{
-          label: 'Number of Users (millions)',
-          data: usersData,
-          borderColor: 'rgba(54, 162, 235, 1)',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          fill: true,
-          borderWidth: 2
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  })
-  .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
-  });
+  const chartManager = new ChartManager('datachart.json');
+  chartManager.fetchData().then(() => chartManager.initializeCharts());
+  
